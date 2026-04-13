@@ -2,25 +2,29 @@
 
 import FadeUp from "./FadeUp";
 
-const contactItems = [
-  {
-    label: "Email",
-    value: "your@email.com",
-    href: "mailto:your@email.com",
-  },
-  {
-    label: "LinkedIn",
-    value: "linkedin.com/in/yourprofile",
-    href: "https://linkedin.com/in/yourprofile",
-  },
-  {
-    label: "Phone",
-    value: "+XXX XXX XXX",
-    href: "tel:+XXXXXXXXX",
-  },
-];
+function buildContactItems() {
+  const items = [];
+
+  const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL;
+  if (email) items.push({ label: "Email", value: email, href: `mailto:${email}` });
+
+  const linkedin = process.env.NEXT_PUBLIC_CONTACT_LINKEDIN;
+  if (linkedin) items.push({ label: "LinkedIn", value: linkedin.replace(/^https?:\/\//, ""), href: linkedin.startsWith("http") ? linkedin : `https://${linkedin}` });
+
+  const phone = process.env.NEXT_PUBLIC_CONTACT_PHONE;
+  if (phone) items.push({ label: "Phone", value: phone, href: `tel:${phone.replace(/\s/g, "")}` });
+
+  const x = process.env.NEXT_PUBLIC_CONTACT_X;
+  if (x) items.push({ label: "X", value: x.replace(/^https?:\/\//, ""), href: x.startsWith("http") ? x : `https://x.com/${x}` });
+
+  const instagram = process.env.NEXT_PUBLIC_CONTACT_INSTAGRAM;
+  if (instagram) items.push({ label: "Instagram", value: instagram.replace(/^https?:\/\//, ""), href: instagram.startsWith("http") ? instagram : `https://instagram.com/${instagram}` });
+
+  return items;
+}
 
 export default function Contact() {
+  const contactItems = buildContactItems();
   return (
     <section
       id="contact"
